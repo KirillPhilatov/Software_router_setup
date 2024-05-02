@@ -1,5 +1,6 @@
 VERBOSE=1
 BACKUP_DIR=/usr/local/backup/
+LOGFILE=install.log
 
 export LOCAL_NET="192.168.1.0/24"
 export NETWORK_ADDR="${LOCAL_NET%/*}"

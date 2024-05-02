@@ -9,6 +9,10 @@ debug() {
     fi
 }
 
+log() {
+    echo "$@" >> "$LOGFILE"
+}
+
 check_os() {
     if [ $(uname) == "Linux" ]; then
 	os=linux
@@ -91,12 +95,12 @@ find_config_path() {
     case "$os" in
 	linux*)
 	    path=$(head -1 ../conf/$1.conf | cut -d ' ' -f2)
-	    # debug "$1 path is: $path"
+	    debug "$1 path is: $path"
 	    echo "$path"
 	    ;;
 	obsd*)
 	    path=$(head -2 ../conf/$1.conf | tail -1 |  cut -d ' ' -f2)
-	    # debug "$1 path is: $path"
+	    debug "$1 path is: $path"
 	    echo "$path"
 	    ;;
     esac
@@ -142,12 +146,17 @@ start_services() {
 	linux*)
 		case "$distro" in
 		    rh*)
-			systemctl enable --now dhcpd hostapd nftables unbound;;
+			systemctl start dhcpd hostapd nftables unbound;;
+			#systemctl enable --now dhcpd hostapd nftables unbound;;
 		    debian*)
 			systemctl unmask hostapd
-			systemctl enable --now hostapd isc-dhcp-server nftables unbound;;
+			systemctl start hostapd isc-dhcp-server nftables unbound;;
+			#systemctl enable --now hostapd isc-dhcp-server nftables unbound;;
 		    *)
-			systemctl enable --now dhcpd hostapd nftables unbound;;
+			service dhcpd start
+			service hostapd start
+			service nftables start
+			service unbound start;;
 		esac
 		;;
 	obsd*)

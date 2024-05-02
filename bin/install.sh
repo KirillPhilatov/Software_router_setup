@@ -11,17 +11,19 @@ debug $(pwd)
 
 check_os
 debug "OS is $os"
+log "OS is $os"
 
 if [ ${os} == "linux" ]; then
     define_distro
     debug "Distro is $distro"
+    log "Distro is $distro"
     install_packages
 fi
 
 if check_packet_forwarding; then
-    debug "Packet forwarding allowed, going futher"
+    log "Packet forwarding allowed, going futher"
 else
-    debug "Packet forwarding is not allowed, allowing..."
+    log "Packet forwarding is not allowed, allowing..."
     allow_packet_forwarding
 fi
 
